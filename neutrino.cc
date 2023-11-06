@@ -1,19 +1,12 @@
-// main01.cc is a part of the PYTHIA event generator.
-// Copyright (C) 2023 Torbjorn Sjostrand.
-// PYTHIA is licenced under the GNU GPL v2 or later, see COPYING for details.
-// Please respect the MCnet Guidelines, see GUIDELINES for details.
-
-// Keywords: basic usage; charged multiplicity
-
-// This is a simple test program. It fits on one slide in a talk.
-// It studies the charged multiplicity distribution at the LHC.
-
 #include "Pythia8/Pythia.h"
+
 using namespace Pythia8;
+
 int main(int argc, char* argv[]) {
     // Generator. Process selection. LHC initialization. Histogram.
     Pythia pythia;
     Event& event = pythia.event;
+
     // Read in commands from external file.
     if (argc != 2)
         pythia.readFile("../config/neutrino.cmnd");
@@ -29,36 +22,28 @@ int main(int argc, char* argv[]) {
     }
 
     // Extract settings to be used in the main program.
-    int    nEvent    = pythia.mode("Main:numberOfEvents");
-    int    nAbort    = pythia.mode("Main:timesAllowErrors");
+    int nEvent = pythia.mode("Main:numberOfEvents");
 
     // Initialize.
     pythia.init();
 
-    Hist mult("lepton multiplicity", 100, -0.5, 799.5);
     // Begin event loop.
-    int iAbort = 0;
     for (int iEvent = 0; iEvent < nEvent; ++iEvent) {
         cout << endl << "Event " << iEvent << endl;
-        // Generate events. Quit if too many failures.
+        // Generate events.
         if (!pythia.next()) {
-            cout << "Pythia::DoInteraction: failed! \n" << endl;
-            if (++iAbort < nAbort) continue;
-            cout << " Event generation aborted prematurely, owing to error!\n";
-            break;
+            cout << " Warning! Pythia::DoInteraction: failed! \n" << endl;
         }
-        // Find number of all final charged particles and fill histogram.
-        int nLepton = 0;
-        for (const auto & evt : pythia.event) {
-            if (evt.isFinal() && evt.isLepton()) {
-                ++nLepton;
-                printf("Particle %d with energy: %f \n", evt.id(), evt.e());
+
+        event.list();
+        cout << "Final stable particles: " << endl;
+        for (const auto & evt : event) {
+            if (evt.isFinal()) {
+                printf("Particle %d with P = (%f, %f, %f, %f) [GeV] \n", evt.id(), evt.px(), evt.py(), evt.pz(), evt.e());
             }
         }
-        mult.fill( nLepton );
-        // End of event loop. Statistics. Histogram. Done.
+        // End of event loop. Statistics. Done.
     }
     pythia.stat();
-    // cout << mult;
     return 0;
 }

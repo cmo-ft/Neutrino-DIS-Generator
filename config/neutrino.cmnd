@@ -4,23 +4,32 @@
 ! Names are case-insensitive  -  but spellings-sensitive!
 ! The changes here are illustrative, not always physics-motivated.
 
+! 0) Settings for random seed
+Random:setSeed = on
+Random:seed = 42
+
+
 ! 1) Settings used in the main program.
-Main:numberOfEvents = 14          ! number of events to generate
+Main:numberOfEvents = 3            ! number of events to generate
 Main:timesAllowErrors = 10         ! how many aborts before run stops
 
-Print:quiet = on
 
-// check if data in particle data file is minimally consistent. Very
-// verbose! set to "off"! we do not change the basic file provided by
-// pythia.
-! Check:particleData = off
+! 2) Set to be lab frame (2) or CMS frame (1)
+Beams:frameType = 2
+
+
+! 3) Settings for error checks.
+Check:particleData = off
 Check:event = on
 Check:levelParticleData = 12
+Print:quiet = on
 
+
+! 4) Settings for the hard-process generation.
 HardQCD:all = on
 ProcessLevel:resonanceDecays = off
 
-// Set up DIS process within some phase space.
+! Set up DIS process within some phase space.
 ! WeakBosonExchange:ff2ff(t:gmZ) = on
 WeakBosonExchange:ff2ff(t:W) = on
 
@@ -30,8 +39,8 @@ PDF:lepton = off
 TimeShower:QEDshowerByL = off
 
 
-! 3) Beam parameter settings.
-Beams:idA = 12                     ! first beam
+! 5) Beam parameter settings.
+Beams:idA = 12                     ! first beam: neutrino
 Beams:idB = 2212                   ! second beam, p = 2212, pbar = -2212
-Beams:eA = 100000.                  ! Injector energy in unit GeV
+Beams:eA = 10000.                  ! Injector energy in unit GeV
 Beams:eB = 0.                      ! Target energy in unit GeV
