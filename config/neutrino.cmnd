@@ -1,0 +1,37 @@
+! File: config.cmnd
+! This file contains commands to be read in for a Pythia8 run.
+! Lines not beginning with a letter or digit are comments.
+! Names are case-insensitive  -  but spellings-sensitive!
+! The changes here are illustrative, not always physics-motivated.
+
+! 1) Settings used in the main program.
+Main:numberOfEvents = 14          ! number of events to generate
+Main:timesAllowErrors = 10         ! how many aborts before run stops
+
+Print:quiet = on
+
+// check if data in particle data file is minimally consistent. Very
+// verbose! set to "off"! we do not change the basic file provided by
+// pythia.
+! Check:particleData = off
+Check:event = on
+Check:levelParticleData = 12
+
+HardQCD:all = on
+ProcessLevel:resonanceDecays = off
+
+// Set up DIS process within some phase space.
+! WeakBosonExchange:ff2ff(t:gmZ) = on
+WeakBosonExchange:ff2ff(t:W) = on
+
+SpaceShower:dipoleRecoil = on
+SpaceShower:pTmaxMatch = 2
+PDF:lepton = off
+TimeShower:QEDshowerByL = off
+
+
+! 3) Beam parameter settings.
+Beams:idA = 12                     ! first beam
+Beams:idB = 2212                   ! second beam, p = 2212, pbar = -2212
+Beams:eA = 100000.                  ! Injector energy in unit GeV
+Beams:eB = 0.                      ! Target energy in unit GeV
